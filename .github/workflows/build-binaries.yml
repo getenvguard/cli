@@ -10,6 +10,9 @@ jobs:
   build:
     name: Build Multi-Arch Binaries
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -33,3 +36,10 @@ jobs:
         with:
           name: envg-binaries
           path: dist/*
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
